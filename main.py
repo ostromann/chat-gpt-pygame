@@ -1,5 +1,6 @@
 import pygame
 from player import Player
+from input import Input
 
 # Initialize Pygame
 pygame.init()
@@ -25,6 +26,9 @@ platform_pos = [200, 300]
 # Create the player
 player = Player(100, 100, 50, 50, (0, 0, 255))
 
+# Create the input handler
+input = Input()
+
 # Set the FPS clock
 clock = pygame.time.Clock()
 
@@ -32,16 +36,16 @@ clock = pygame.time.Clock()
 running = True
 while running:
     # Handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                player.velocity[0] = -5
-            if event.key == pygame.K_RIGHT:
-                player.velocity[0] = 5
-            if event.key == pygame.K_UP:
-                player.velocity[1] = -10
+    running = input.handle_events()
+
+    # Update the player velocity based on the input
+    player.velocity[0] = 0
+    if input.left:
+        player.velocity[0] -= 5
+    if input.right:
+        player.velocity[0] += 5
+    if input.up:
+        player.velocity[1] = -10
     # Update the player
     player.update()
 
