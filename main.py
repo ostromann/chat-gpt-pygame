@@ -1,7 +1,7 @@
-import pygame
-from player import Player
-from input import Input
 from my_platform import Platform
+from input import Input
+from player import Player
+import pygame
 
 # Initialize Pygame
 pygame.init()
@@ -53,15 +53,18 @@ while running:
     player.update()
 
     # Check if the player is on a platform
+    on_platform = False
     for platform in platforms:
         if (player.y + player.height > platform.y and
             player.x + player.width > platform.x and
                 player.x < platform.x + platform.width):
             player.velocity[1] = 0
             player.y = platform.y - player.height
+            on_platform = True
+            break
 
     # Check if the player fell outside the screen
-    if player.y > window_size[1]:
+    if not on_platform and player.y > window_size[1]:
         # Restart the game
         player.x = 100
         player.y = 100
