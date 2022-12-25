@@ -1,6 +1,7 @@
 import pygame
 from player import Player
 from input import Input
+from my_platform import Platform
 
 # Initialize Pygame
 pygame.init()
@@ -17,11 +18,12 @@ pygame.display.set_caption("My Game")
 # Set the background color
 bg_color = (255, 255, 255)
 
-# Set the platform properties
-platform_width = 200
-platform_height = 20
-platform_color = (0, 255, 0)
-platform_pos = [200, 300]
+# Create the platforms
+platforms = [
+    Platform(200, 300, 200, 20, (0, 255, 0)),
+    Platform(400, 200, 200, 20, (0, 255, 0)),
+    Platform(100, 100, 200, 20, (0, 255, 0)),
+]
 
 # Create the player
 player = Player(100, 100, 50, 50, (0, 0, 255))
@@ -51,11 +53,12 @@ while running:
     player.update()
 
     # Check if the player is on a platform
-    if (player.y + player.height > platform_pos[1] and
-        player.x + player.width > platform_pos[0] and
-            player.x < platform_pos[0] + platform_width):
-        player.velocity[1] = 0
-        player.y = platform_pos[1] - player.height
+    for platform in platforms:
+        if (player.y + player.height > platform.y and
+            player.x + player.width > platform.x and
+                player.x < platform.x + platform.width):
+            player.velocity[1] = 0
+            player.y = platform.y - player.height
 
     # Check if the player fell outside the screen
     if player.y > window_size[1]:
@@ -67,9 +70,9 @@ while running:
     # Draw the background
     screen.fill(bg_color)
 
-    # Draw the platform
-    pygame.draw.rect(screen, platform_color, pygame.Rect(
-        platform_pos[0], platform_pos[1], platform_width, platform_height))
+    # Draw the platforms
+    for platform in platforms:
+        platform.draw(screen)
 
     # Draw the player
     player.draw(screen)
