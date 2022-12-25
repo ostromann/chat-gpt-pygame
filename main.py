@@ -52,19 +52,31 @@ while running:
     # Update the player
     player.update()
 
-    # Check if the player is on a platform
-    on_platform = False
+    # Check if the player is colliding with any platform
     for platform in platforms:
         if (player.y + player.height > platform.y and
             player.x + player.width > platform.x and
                 player.x < platform.x + platform.width):
-            player.velocity[1] = 0
-            player.y = platform.y - player.height
-            on_platform = True
-            break
+            # Adjust the player position to resolve the collision
+            if player.velocity[1] > 0:
+                # Collision from above
+                player.y = platform.y - player.height
+                player.velocity[1] = 0
+            elif player.velocity[1] < 0:
+                # Collision from below
+                player.y = platform.y + platform.height
+                player.velocity[1] = 0
+            elif player.velocity[0] > 0:
+                # Collision from left
+                player.x = platform.x - player.width
+                player.velocity[0] = 0
+            elif player.velocity[0] < 0:
+                # Collision from right
+                player.x = platform.x + platform.width
+                player.velocity[0] = 0
 
     # Check if the player fell outside the screen
-    if not on_platform and player.y > window_size[1]:
+    if player.y > window_size[1]:
         # Restart the game
         player.x = 100
         player.y = 100
