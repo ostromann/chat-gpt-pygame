@@ -46,6 +46,7 @@ while running:
         player.velocity[0] += 5
     if input.up:
         player.velocity[1] = -10
+
     # Update the player
     player.update()
 
@@ -55,6 +56,13 @@ while running:
             player.x < platform_pos[0] + platform_width):
         player.velocity[1] = 0
         player.y = platform_pos[1] - player.height
+
+    # Check if the player fell outside the screen
+    if player.y > window_size[1]:
+        # Restart the game
+        player.x = 100
+        player.y = 100
+        player.velocity = [0, 0]
 
     # Draw the background
     screen.fill(bg_color)
