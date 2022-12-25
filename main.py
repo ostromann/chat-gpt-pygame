@@ -37,6 +37,17 @@ clock = pygame.time.Clock()
 # Initialize the obstacles list
 obstacles = []
 
+# Generate a random level
+for i in range(10):
+    if random.random() < 0.5:
+        # 50% chance of creating a wall
+        obstacles.append(Wall((random.randint(0, window_size[0] // grid_size[0] - 1),
+                              random.randint(0, window_size[1] // grid_size[1] - 1)), grid_size))
+    else:
+        # 50% chance of creating a trap
+        obstacles.append(Trap((random.randint(0, window_size[0] // grid_size[0] - 1),
+                              random.randint(0, window_size[1] // grid_size[1] - 1)), grid_size))
+
 # Run the game loop
 running = True
 while running:
@@ -68,17 +79,6 @@ while running:
         player.pos[1] = 0
     elif player.pos[1] > window_size[1] / grid_size[1] - 1:
         player.pos[1] = window_size[1] / grid_size[1] - 1
-
-    # Randomly add a new obstacle
-    if random.random() < 0.1:
-        if random.random() < 0.5:
-            # 50% chance of creating a wall
-            obstacles.append(Wall((random.randint(0, window_size[0] // grid_size[0] - 1),
-                                  random.randint(0, window_size[1] // grid_size[1] - 1)), grid_size))
-        else:
-            # 50% chance of creating a trap
-            obstacles.append(Trap((random.randint(0, window_size[0] // grid_size[0] - 1),
-                                  random.randint(0, window_size[1] // grid_size[1] - 1)), grid_size))
 
     # Draw the background
     screen.fill(bg_color)
